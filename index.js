@@ -1,7 +1,4 @@
-const listContacts = require("./contacts/listContacts");
-const getContactById = require("./contacts/getContactById");
-const removeContact = require("./contacts/removeContact");
-const addContact = require("./contacts/addContact");
+const contactsOperations = require("./contacts");
 
 const { Command } = require('commander');
 const program = new Command();
@@ -16,22 +13,22 @@ program.parse(process.argv);
 
 const argv = program.opts();
 
-function invokeAction({ action, id, name, email, phone }) {
+const invokeAction= async ({ action, id, name, email, phone }) => {
   switch (action) {
     case 'list':
-      listContacts();
+      const contacts = await contactsOperations.listContacts();
       break;
 
     case 'get':
-      getContactById(id);
+      const contact = await contactsOperations.getContactById(id);
       break;
 
     case 'add':
-      addContact(name, email, phone);
+      const newContact = await contactsOperations.addContact(name, email, phone);
       break;
 
     case 'remove':
-      removeContact(id);
+      const removeContact = await contactsOperations.removeContact(id);
       break;
 
     default:
